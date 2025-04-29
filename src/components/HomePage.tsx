@@ -1,38 +1,19 @@
- import React,{ useState, useEffect } from 'react';
+ import React,{ useState, useEffect, useMemo } from 'react';
  import { useGetProductsQuery } from '../services/productsApi';
  import { Link } from 'react-router-dom';
  import styles from './HomePage.module.scss';
+ import { Product } from '../types/products'; 
  
- interface Product {
-   id: number;
-   name: string;
-   description: string;
-   ean: string;
-   upc: string;
-   image: string;
-   images: { title: string; description: string; url: string }[];
-   net_price: number;
-   taxes: number;
-   price: number;
-   categories: number[];
-   tags: string[];
- }
- interface ProductsResponse {
-    status: string;
-    code: number;
-    locale: string;
-    seed: number|null;
-    total: number;
-    data: Product[];
- }
- 
- const HomePage: React.FC = () => {
-    const [page, setPage] = useState(1);
-    const [searchTerm, setSearchTerm] = useState('');
-    const {data: productsResponse, isLoading, error} = useGetProductsQuery(page);
-    const allProducts: Product[] = productsResponse?.data || [];
-    const [filteredProducts, setFilteredProducts] = useState<Product[]>(allProducts);
-    const [hasNextPage, setHasNextPage] = useState(true);
+const HomePage: React.FC = () => {
+const [page, setPage] = useState(1);
+const [searchTerm, setSearchTerm] = useState('');
+const {data: productsResponse, isLoading, error} = useGetProductsQuery(page);
+const allProducts: Product[] = useMemo(() => productsResponse?.data || [], [productsResponse?.data]); // Используем useMemo
+const [filteredProducts, setFilteredProducts] = useState<Product[]>(allProducts);
+const { data: nextPageProducts, isLoading: isNextPageLoading } = useGetProductsQuery(page + 1, {
+  skip: isLoading || !!error || !productsResponse?.data?.length,
+});
+const [hasNextPage, setHasNextPage] = useState(true);
 
     // Фильтрация продуктов по поисковому запросу
     useEffect(() => {
@@ -48,8 +29,14 @@
 
     // Проверка наличия следующей страницы для пагинации
     useEffect(() => {
-      setHasNextPage(productsResponse?.total ? productsResponse.total > page * 10 : false);
-    }, [productsResponse?.total, page])
+      if (nextPageProducts?.data && nextPageProducts.data.length > 0) {
+        setHasNextPage(true);
+      } else if (!isNextPageLoading && page > 0 && productsResponse?.data && productsResponse.data.length > 0) {
+        setHasNextPage(false);
+      } else {
+        setHasNextPage(false);
+      }
+    }, [nextPageProducts?.data, isNextPageLoading, page, productsResponse?.data]);
 
     // Назад
     const handlePreviousPage = () => {
