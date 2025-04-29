@@ -10,6 +10,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
+    font-family: 'Roboto', sans-serif;
 }
 ul {
     list-style: none;
@@ -37,7 +38,7 @@ button {
         background-color: #eee;
     }
 
-    &disabled {
+    &:disabled {
         opacity: 0.5;
         cursor: not-allowed;
     }

@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import HomePage from './components/HomePage';
 import ProductDetailPage from './components/ProductDetailPage';
@@ -9,8 +8,8 @@ import PersonalAccount from './components/PersonalAccount';
 
 function App() {
   return (
+    
     <Router>
-      <div>
         <nav>
           <ul>
             <li>
@@ -36,9 +35,8 @@ function App() {
           <Route path="/product/:id" element={<ProductDetailPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/feedback" element={<Feedback />} />
-          <Route path="/personal-account" element={<PrivateRoute><PersonalAccount /></PrivateRoute>} />          <Route path="*" element={<h1>404 Not Found</h1>} /> {/* Добавляем обработку несуществующих маршрутов */}
+          <Route path="/personal-account" element={<PrivateRoute><PersonalAccount /></PrivateRoute>} />          <Route path="*" element={<h1>404 Not Found</h1>} /> Добавляем обработку несуществующих маршрутов
         </Routes>
-      </div>
     </Router>
   );
 }
