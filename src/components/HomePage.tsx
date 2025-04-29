@@ -26,7 +26,7 @@
  
  const HomePage: React.FC = () => {
     const [page, setPage] = useState(1);
-    const [searcTerm, setSearchTerm] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
   return (
     <div>
       <h1>Главная страница</h1>

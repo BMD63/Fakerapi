@@ -5,7 +5,7 @@ import ProductDetailPage from './components/ProductDetailPage';
 import LoginPage from './components/LoginPage';
 import PrivateRoute from './components/PrivateRoute'; // Импортируем PrivateRoute
 import Feedback from './components/Feedback'; // Импортируем Feedback
-import PersonalAccount from './components/PersonalAccount'; // Импортируем PersonalAccaunt
+import PersonalAccount from './components/PersonalAccount'; 
 
 function App() {
   return (
@@ -36,8 +36,7 @@ function App() {
           <Route path="/product/:id" element={<ProductDetailPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/feedback" element={<Feedback />} />
-          <Route path="/personal-account" element={<PersonalAccount />} />
-          <Route path="*" element={<h1>404 Not Found</h1>} /> {/* Добавляем обработку несуществующих маршрутов */}
+          <Route path="/personal-account" element={<PrivateRoute><PersonalAccount /></PrivateRoute>} />          <Route path="*" element={<h1>404 Not Found</h1>} /> {/* Добавляем обработку несуществующих маршрутов */}
         </Routes>
       </div>
     </Router>
