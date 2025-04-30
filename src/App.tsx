@@ -16,9 +16,6 @@ function App() {
               <Link to="/">Главная</Link>
             </li>
             <li>
-              <Link to="/product/1">Продукт 1 (пример)</Link>
-            </li>
-            <li>
               <Link to="/login">Войти</Link>
             </li>
             <li>
