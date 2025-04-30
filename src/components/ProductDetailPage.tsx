@@ -3,8 +3,15 @@ import { useParams } from 'react-router-dom'
 import { useGetProductByIdQuery } from '../services/productsApi';
 import styles from './ProductDetailPage.module.scss'
 import { RouteParams } from '../types/routs'
+import { FaTimes } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+
 const ProductDetailPage: React.FC = () => {
     const { id } = useParams<RouteParams>()
+    const navigate = useNavigate();
+    const handleCloseClick = () => {
+        navigate('/');
+    }
     const { data: product, isLoading, error } = useGetProductByIdQuery(id as string, { skip: !id });    
     if (isLoading) {
         return <div>Загрузка...</div>
@@ -17,9 +24,12 @@ const ProductDetailPage: React.FC = () => {
     }   
     return (
         <div className={styles.container}>
+          <button className={styles.closeButton}>
+            <FaTimes onClick={handleCloseClick} />
+          </button>
             <h1 className={styles.title}>{product.name}</h1>
             <p className={styles.description}>{product.description}</p>
-            <p className={styles.price}>Цена: {product.price}</p>
+            <p className={styles.price}>Цена: {product.price}₽</p>
             {product.image && (
             <div className={styles.imageContainer}>
                 <img
