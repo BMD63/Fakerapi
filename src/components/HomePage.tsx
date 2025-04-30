@@ -76,7 +76,7 @@ const [hasNextPage, setHasNextPage] = useState(true);
       onChange={handleSearch} 
       />
       <button onClick={handleResetSearch}>Сбросить поиск</button>
-
+      <h2 className={styles.subtitle}>Список продуктов</h2>
       <ul className={styles.productList}>
         {filteredProducts.map((product) => (
           <li key={product.id} className={styles.listItem}>
