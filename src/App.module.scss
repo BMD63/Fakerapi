@@ -29,3 +29,23 @@
     align-items: center;
   } 
 }
+.navLink,
+.navLinkButton {
+  color: #fff;
+  cursor: pointer;
+  text-decoration: none;
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: 16px;
+  font-weight: bold;
+  transition: color 0.3s ease;
+  &:hover {
+    color: #007bff;
+  }
+  @media (orientation: portrait) 
+  {
+    font-size: 14px;
+  }
+}
+

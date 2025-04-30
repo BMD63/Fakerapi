@@ -1,4 +1,7 @@
 export interface LoginFormValues {
-    email: string;
+    login: string;
     password: string;
+  }
+  export interface LoginPageProps {
+    onClose: () => void;
   }

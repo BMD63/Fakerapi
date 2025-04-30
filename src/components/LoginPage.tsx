@@ -1,30 +1,49 @@
 import React from 'react'  
 import {useForm, SubmitHandler} from 'react-hook-form'
 import styles from './LoginPage.module.scss' 
-import { LoginFormValues } from '../types/login'  
-const LoginPage: React.FC = () => {
+import { useNavigate } from 'react-router-dom'
+import { LoginFormValues, LoginPageProps } from '../types/login'  
+import { FaTimes } from 'react-icons/fa'
+import { TEST_CREDENTIALS } from '../constants'
+
+const LoginPage: React.FC<LoginPageProps> = ({onClose}) => {
     const { register, handleSubmit, formState: { errors } } = useForm<LoginFormValues>();
+    const navigate = useNavigate();
     const onSubmit: SubmitHandler<LoginFormValues> = data => {
+        if (data.login === TEST_CREDENTIALS.login && data.password === TEST_CREDENTIALS.password) {
+            localStorage.setItem('isLoggedIn', 'true');
+            onClose();
+            navigate('/personal-account');
+        } else {
+            alert('Неверные учетные данные');
+        }
         console.log(data);
     };
     return (
-            <div className={styles.loginContainer}>
+            <div className={styles.modalOverlay} onClick={onClose}>
+                <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+                    <button className={styles.closeButton} onClick={onClose}>
+                        <FaTimes />
+                    </button>
                 <h2 className={styles.loginTitle}>Вход</h2>
                 <form className={styles.loginForm} onSubmit={handleSubmit(onSubmit)}>
                     <div className={styles.formGroup}>
-                        <label htmlFor="email">Email:</label>
+                        <label htmlFor="login">Логин:</label>
                         <input
-                            type="email"
-                            id="email"
-                            {...register("email", { required: "Email is required" })}
+                            type="text"
+                            id="login"
+                            autoComplete="off" 
+                            className = {styles.input}
+                            {...register("login", { required: "Логин обязателен" })}
                         />
-                        {errors.email && <span className={styles.error}>{errors.email.message}</span>}
+                        {errors.login && <span className={styles.errorMessage}>{errors.login.message}</span>}
                     </div>
                     <div className={styles.formGroup}>
                         <label htmlFor="password">Пароль:</label>
                         <input
                             type="password"
                             id="password"
+                            autoComplete="off" 
                             className = {styles.input}
                             {...register("password", { required: "Пароль обязателен" })}
                         />
@@ -32,7 +51,7 @@ const LoginPage: React.FC = () => {
                     </div>
                     <button type="submit" className={styles.loginButton}>Войти</button>
                 </form>
-                 
+                 </div>
             </div>
     )
 }

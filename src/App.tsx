@@ -1,29 +1,39 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import HomePage from './components/HomePage';
 import ProductDetailPage from './components/ProductDetailPage';
 import LoginPage from './components/LoginPage';
-import PrivateRoute from './components/PrivateRoute'; // Импортируем PrivateRoute
 import Feedback from './components/Feedback'; // Импортируем Feedback
 import PersonalAccount from './components/PersonalAccount'; 
 import styles from './App.module.scss'; 
+import React, {useState} from 'react';
 
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  return isLoggedIn ? children : <Navigate to="/login" />;};
 function App() {
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const openLoginModal = () => {
+    setIsLoginModalOpen(true);
+  };
+  const closeLoginModal = () => {
+    setIsLoginModalOpen(false);
+  };
   return (
     <Router>
       <div className={styles.appContainer}>
         <nav className={styles.mainNav}>
           <ul className={styles.navList}>
             <li className={styles.navItem}>
-              <Link to="/">Главная</Link>
+              <Link to="/" className={styles.navLink}>Главная</Link>
             </li>
             <li className={styles.navItem}>
-              <Link to="/login">Войти</Link>
+            <button onClick={openLoginModal} className={styles.navLinkButton}>Войти</button>
             </li>
             <li className={styles.navItem}>
-              <Link to="/feedback">Обратная связь</Link>
+              <Link to="/feedback" className={styles.navLink}>Обратная связь</Link>
             </li>
             <li className={styles.navItem}>
-              <Link to="/personal-account">Личный кабинет</Link>
+              <Link to="/personal-account" className={styles.navLink}>Личный кабинет</Link>
             </li>
           </ul>
         </nav>
@@ -31,10 +41,11 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/product/:id" element={<ProductDetailPage />} />
-            <Route path="/login" element={<LoginPage />} />
+            {/* <Route path="/login" element={<LoginPage />} /> */}
             <Route path="/feedback" element={<Feedback />} />
-            <Route path="/personal-account" element={<PrivateRoute><PersonalAccount /></PrivateRoute>} />          <Route path="*" element={<h1>404 Not Found</h1>} /> Добавляем обработку несуществующих маршрутов
+            <Route path="/personal-account" element={<ProtectedRoute><PersonalAccount /></ProtectedRoute>} />          <Route path="*" element={<h1>404 Not Found</h1>} /> Добавляем обработку несуществующих маршрутов
           </Routes>
+          {isLoginModalOpen && <LoginPage onClose={closeLoginModal} />}
           </div>
         </div>
     </Router>
