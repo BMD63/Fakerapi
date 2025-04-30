@@ -1,0 +1,31 @@
+.appContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f0f0f0;
+}
+.mainNav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px 10px;
+  background-color: #333;
+  color: #fff;
+}
+.navList {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  margin: auto;
+  @media (orientation: portrait) 
+  {
+    flex-direction: column;
+    align-items: center;
+  } 
+}
