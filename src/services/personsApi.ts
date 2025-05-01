@@ -7,7 +7,7 @@ export const personsApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: BASE_API_URL }),
   endpoints: (builder) => ({
     getPerson: builder.query<PersonData, void>({
-      query: () => '/persons',
+      query: () => '/persons?_id=1',
       transformResponse: (response: PersonsResponse) => response.data[0],
     }),
   }),

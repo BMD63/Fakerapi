@@ -1,5 +1,5 @@
-export interface PersonData {
-    id: number;
+interface Address {
+  id: number;
   street: string;
   streetName: string;
   buildingNumber: string;
@@ -9,6 +9,19 @@ export interface PersonData {
   country_code: string;
   latitude: number;
   longitude: number;
+}
+
+export interface PersonData {
+  id: number;
+  firstname: string;
+  lastname: string;
+  email: string;
+  phone: string;
+  birthday: string;
+  gender: string;
+  address: Address;
+  website: string;
+  image: string;
 }
 export interface PersonsResponse {
 status: string;
