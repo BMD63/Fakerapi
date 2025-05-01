@@ -11,8 +11,8 @@ import {
     setComment,
     resetForm,
     selectFeedbackForm,
-} from '../features/feedbackFormSlice'
-// import styles from './Feedback.module.scss'
+} from './feedbackFormSlice'
+import styles from './Feedback.module.scss'
 
 type FeedbackFormProps = object
 const Feedback : React.FC<FeedbackFormProps> = () => {
@@ -44,11 +44,57 @@ const Feedback : React.FC<FeedbackFormProps> = () => {
         };
         console.log('Данные формы (из Redux):', formData);
         dispatch(resetForm()); // Очищаем форму после "отправки"
-        // TODO: Показать модальное окно
       }, [fio, phone, email, date, comment, dispatch]);
     return (
-        <div>
-            <h1>Страница обратной связи</h1>
+        <div className={styles.feedbackFormContainer}>
+            <h2>Обратная связь</h2>
+            <form onSubmit={handleSubmit}>
+            <div className={styles.formGroup}>
+            <label htmlFor="fio">ФИО:</label>
+            <input
+                type="text"
+                id="fio"
+                value={fio}
+                onChange={handleFioChange}
+            />
+            </div>
+            <div className={styles.formGroup}>
+            <label htmlFor="phone">Телефон:</label>
+            <input
+                type="tel"
+                id="phone"
+                value={phone}
+                onChange={handlePhoneChange}
+            />
+            </div>
+            <div className={styles.formGroup}>
+            <label htmlFor="email">Email:</label>
+            <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={handleEmailChange}
+            />    
+            </div>
+            <div className={styles.formGroup}>
+            <label htmlFor="date">Дата:</label>
+            <DatePicker
+                selected={date}
+                onChange={handleDateChange}
+                dateFormat="dd/MM/yyyy"
+               />
+            </div>
+            <div className={styles.formGroup}>
+            <label htmlFor="comment">Комментарий:</label>
+            <textarea
+                id="comment"
+                value={comment}
+                onChange={handleCommentChange}
+            />
+            </div>
+            <button type="submit">Отправить</button>
+            </form>
+                
         </div>
     )
 }
