@@ -6,12 +6,13 @@ import { LoginFormValues, LoginPageProps } from '../types/login'
 import { FaTimes } from 'react-icons/fa'
 import { TEST_CREDENTIALS } from '../constants'
 
-const LoginPage: React.FC<LoginPageProps> = ({onClose}) => {
+const LoginPage: React.FC<LoginPageProps> = ({onClose, onLoginSuccess}) => {
     const { register, handleSubmit, formState: { errors } } = useForm<LoginFormValues>();
     const navigate = useNavigate();
     const onSubmit: SubmitHandler<LoginFormValues> = data => {
         if (data.login === TEST_CREDENTIALS.login && data.password === TEST_CREDENTIALS.password) {
             localStorage.setItem('isLoggedIn', 'true');
+            onLoginSuccess()
             onClose();
             navigate('/personal-account');
         } else {
