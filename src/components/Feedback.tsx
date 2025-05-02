@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useCallback, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../hooks'
+import {FaTimes} from 'react-icons/fa'
+import { useGetPersonQuery } from '../services/personsApi'
+import { FeedbackFormModal } from '../types/feedback'
 import {
     setFio,
     setPhone,
@@ -18,7 +21,27 @@ type FeedbackFormProps = object
 const Feedback : React.FC<FeedbackFormProps> = () => {
     const { fio, phone, email, date, comment } = useAppSelector(selectFeedbackForm)
     const dispatch = useAppDispatch()
-    // состояния ошибок для валидации формы
+    // проверка авторизации
+    const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem('isLoggedIn') === 'true'); 
+    const {data : userData, isFetching, isSuccess, isError, error} = useGetPersonQuery(undefined, {skip: !isLoggedIn})
+    useEffect(() => {
+      const handleStorageChange = (event: StorageEvent) => {
+        if (event.key === 'isLoggedIn') {
+          setIsLoggedIn(event.newValue === 'true');
+        }
+      };
+  
+      window.addEventListener('storage', handleStorageChange);
+  
+      // Очистка слушателя при размонтировании компонента
+      return () => {
+        window.removeEventListener('storage', handleStorageChange);
+      };
+    }, []); 
+        // стейт модального окна
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [formDataForModal, setFormDataForModal] = useState<FeedbackFormModal|null>(null);
+        // состояния для ошибок для валидации формы
     const [fioError, setFioError] = useState('');
     const [phoneError, setPhoneError] = useState('');
     const [emailError, setEmailError] = useState('');
@@ -81,15 +104,28 @@ const Feedback : React.FC<FeedbackFormProps> = () => {
           email,
           date: date ? new Date(date).toLocaleDateString() : '',
           comment,
+          ...(isLoggedIn && isSuccess && userData ? { userId: userData.id, birthday: userData.birthday } : {}),
         };
         console.log('Данные формы (из Redux):', formData);
-        dispatch(resetForm()); 
+        setFormDataForModal(formData);
+        setIsModalOpen(true);
+        // dispatch(resetForm()); 
         }
-        }, [fio, phone, email, date, comment, dispatch]);
+        }, [fio, phone, email, date, comment, isLoggedIn, isSuccess, userData]);
         return (
         <div className={styles.feedbackFormContainer}>
             <h2>Обратная связь</h2>
             <form onSubmit={handleSubmit}>
+              {/* скрытая часть формы */}
+            {isLoggedIn && isSuccess && userData && (
+              <>
+                <input type="hidden" name="userId" value={userData?.id} />
+                <input type="hidden" name="birthday" value={userData?.birthday} />
+              </>
+            )}
+            {isLoggedIn && isFetching && <p>Загрузка данных пользователя...</p>}
+            {isLoggedIn && isError && <p>Ошибка загрузки данных пользователя: {error ? JSON.stringify(error) : 'Неизвестная ошибка'}</p>}
+            {/* основная форма */}
             <div className={styles.formGroup}>
             <label htmlFor="fio">ФИО:</label>
             <input
@@ -140,7 +176,23 @@ const Feedback : React.FC<FeedbackFormProps> = () => {
             </div>
             <button type="submit">Отправить</button>
             </form>
-                
+            {isModalOpen && formDataForModal && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <h2>Данные обратной связи</h2>
+            <p>ФИО: {formDataForModal.fio}</p>
+            <p>Телефон: {formDataForModal.phone}</p>
+            <p>Почта: {formDataForModal.email}</p>
+            <p>Дата: {formDataForModal.date}</p>
+            <p>Комментарий: {formDataForModal.comment}</p>
+            {formDataForModal.userId && <p>ID пользователя: {formDataForModal.userId}</p>}
+            {formDataForModal.birthday && <p>Дата рождения: {formDataForModal.birthday}</p>}
+            <button className={styles.closeButton} onClick={() => { setIsModalOpen(false); dispatch(resetForm()); setFormDataForModal(null); }}>
+              <FaTimes />
+            </button>
+          </div>
+        </div>
+      )}    
         </div>
     )
 }
