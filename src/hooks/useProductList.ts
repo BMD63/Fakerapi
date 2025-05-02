@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useMemo} from "react";
 import { useGetProductsQuery } from "../services/productsApi";
 import { Product, IUseProductListResult } from "../types/products";
 
@@ -6,7 +6,7 @@ const UseProductListResult = (): IUseProductListResult => {
     const [page, setPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
     const { data: productsResponse, isLoading, error } = useGetProductsQuery(page);
-    const allProducts: Product[] = productsResponse?.data || [];
+    const allProducts: Product[] = useMemo(() => productsResponse?.data || [], [productsResponse?.data]);
     const [filteredProducts, setFilteredProducts] = useState<Product[]>(allProducts);
     const [hasNextPage, setHasNextPage] = useState(true);
     const { data: nextPageProducts, isLoading: isNextPageLoading } = useGetProductsQuery(page + 1, {
