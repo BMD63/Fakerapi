@@ -23,7 +23,7 @@ export const feedbackFormSlice = createSlice({
             state.email = action.payload;
         },
         setDate: (state, action: PayloadAction<Date | null>) => {
-            state.date = action.payload;
+            state.date = action.payload ? action.payload.toISOString() : null;
         },
         setComment: (state, action: PayloadAction<string>) => {
             state.comment = action.payload;    

@@ -48,5 +48,5 @@ export const productsApi = createApi({
 export const { useGetProductsQuery, useGetProductByIdQuery } = productsApi;
 
 export const useProductApiSeed = () => {
-  return useMemo(() => currentSeed, []); // Возвращаем тот же seed
+  return useMemo(() => currentSeed, []); 
 };

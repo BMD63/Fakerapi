@@ -27,19 +27,21 @@ const Feedback : React.FC<FeedbackFormProps> = () => {
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         dispatch(setEmail(e.target.value))
     }
-    const handleDateChange = (date: Date | null) => {
-        dispatch(setDate(date))
-    }
+    const handleDateChange = useCallback((newDate: Date | null) => {
+        dispatch(setDate(newDate))
+      }, [dispatch]);
+    
     const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         dispatch(setComment(e.target.value))
     }
     const handleSubmit = useCallback((event: React.FormEvent) => {
         event.preventDefault();
+        
         const formData = {
           fio,
           phone,
           email,
-          date: date ? date.toLocaleDateString() : '',
+          date: date ? new Date(date).toLocaleDateString() : '',
           comment,
         };
         console.log('Данные формы (из Redux):', formData);
@@ -79,7 +81,7 @@ const Feedback : React.FC<FeedbackFormProps> = () => {
             <div className={styles.formGroup}>
             <label htmlFor="date">Дата:</label>
             <DatePicker
-                selected={date}
+                selected={date ? new Date(date) : null}
                 onChange={handleDateChange}
                 dateFormat="dd/MM/yyyy"
                />
