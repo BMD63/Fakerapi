@@ -80,7 +80,7 @@ const [hasNextPage, setHasNextPage] = useState(true);
       <ul className={styles.productList}>
         {filteredProducts.map((product) => (
           <li key={product.id} className={styles.listItem}>
-            ID: {product.id} - <Link to={`/product/${product.id}`}>{product.name}</Link>
+            <Link to={`/product/${product.id}`}>{product.name}</Link>
             </li>
         ))}
       </ul>

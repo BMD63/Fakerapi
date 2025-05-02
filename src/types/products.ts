@@ -22,3 +22,18 @@ export interface Product {
     total: number;
     data: Product[];
   }
+
+  export interface IUseProductListResult {
+    page: number;
+    setPage: React.Dispatch<React.SetStateAction<number>>;
+    searchTerm: string;
+    setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+    filteredProducts: Product[];
+    hasNextPage: boolean;
+    isLoading: boolean;
+    error: any;
+    handlePreviousPage: () => void;
+    handleNextPage: () => void;
+    handleSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    handleResetSearch: () => void;
+  }
