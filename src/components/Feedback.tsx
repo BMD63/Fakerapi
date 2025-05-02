@@ -179,7 +179,7 @@ const Feedback : React.FC<FeedbackFormProps> = () => {
             {isModalOpen && formDataForModal && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
-            <h2>Данные обратной связи</h2>
+            <h2>Вы отправили следующие данные</h2>
             <p>ФИО: {formDataForModal.fio}</p>
             <p>Телефон: {formDataForModal.phone}</p>
             <p>Почта: {formDataForModal.email}</p>
