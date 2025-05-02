@@ -67,7 +67,8 @@ function App() {
               element={<LoginPage onLoginSuccess={handleLoginSuccess} onClose={closeLoginModal} />}
             /> */}
             <Route path="/feedback" element={<Feedback />} />
-            <Route path="/personal-account" element={<ProtectedRoute><PersonalAccount /></ProtectedRoute>} />          <Route path="*" element={<h1>404 Not Found</h1>} /> Добавляем обработку несуществующих маршрутов
+            <Route path="/personal-account" element={<ProtectedRoute><PersonalAccount onLoginOut={handleLogout} /></ProtectedRoute>} />          
+            <Route path="*" element={<h1>404 Not Found</h1>} /> // Роут для обработку несуществующих маршрутов
           </Routes>
           {isLoginModalOpen && <LoginPage onClose={closeLoginModal} onLoginSuccess={handleLoginSuccess} />}
           </div>

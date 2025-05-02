@@ -2,7 +2,7 @@ import React from 'react';
 import { useGetPersonQuery } from '../services/personsApi';
 // import { PersonData } from '../types/persons';
 import styles from './PersonalAccount.module.scss';
-const PersonalAccount: React.FC  = () => {
+const PersonalAccount: React.FC<{ onLoginOut: () => void }> = ({ onLoginOut }) => {
     const {data: personData,isLoading, isError, error} = useGetPersonQuery();
     console.log('personData', personData);
     console.log('isLoading', isLoading);
@@ -29,6 +29,9 @@ const PersonalAccount: React.FC  = () => {
     if (personData) {
         return (
             <div className={styles.personalAccountContainer}>
+                <button onClick={onLoginOut} className={styles.logoutButton}>
+                    Выйти из аккаунта
+                </button>
                 <h2 className={styles.title}>Личный кабинет</h2>
                 <div className={styles.infoBlocks}>
                     <div className={styles.personalInfoBlock}>

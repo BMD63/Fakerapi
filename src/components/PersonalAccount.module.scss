@@ -8,6 +8,17 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
+.logoutButton {
+    display: flex;
+    margin-bottom: 20px;
+    margin-left: auto;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+    &:hover {
+        opacity: 1;
+    }
+}
+
 .infoBlocks {
     display: flex;
     gap : 20px;
