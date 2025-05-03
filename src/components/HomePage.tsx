@@ -26,9 +26,17 @@ const HomePage: React.FC = () => {
       return <div className={styles.loading}>Загрузка...</div>;
     }
     if (error) {
-      return <div className={styles.error}>
-        Ошибка: {typeof error?.data === 'string' ? error.data : JSON.stringify(error?.data)}
-        </div>;
+      let errorMessage: string;
+      if ('data' in error && typeof error.data === 'string') {
+        errorMessage = error.data;
+      } else if ('data' in error && typeof error.data !== 'string') {
+        errorMessage = JSON.stringify(error.data);
+      } else if ('message' in error) {
+        errorMessage = error.message || 'Произошла ошибка';
+      } else {
+        errorMessage = 'Произошла неизвестная ошибка';
+      }
+      return <div className={styles.error}>Ошибка: {errorMessage}</div>;
     }
     if (filteredProducts.length === 0) {
       return <div className={styles.noResults}>Нет продуктов для отображения</div>;

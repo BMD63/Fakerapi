@@ -18,11 +18,6 @@ export interface Product {
   }
   
   export interface ProductsResponse {
-    status: string;
-    code: number;
-    locale: string;
-    seed: number | null;
-    total: number;
     data: Product[];
   }
 
@@ -41,4 +36,5 @@ export interface Product {
     handleResetSearch: () => void;
     itemsPerPage: number;
     setItemsPerPage: React.Dispatch<React.SetStateAction<number>>;
+    allProducts: Product[]
   }

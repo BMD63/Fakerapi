@@ -66,6 +66,7 @@ const useProductListResult = (): IUseProductListResult => {
         handleResetSearch,
         itemsPerPage,
         setItemsPerPage,
+        allProducts,
     };
 }
 export default useProductListResult;

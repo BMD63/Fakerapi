@@ -3,7 +3,7 @@ import {Routes, Route, Link, Navigate } from 'react-router-dom';
 import HomePage from './components/HomePage';
 import ProductDetailPage from './components/ProductDetailPage';
 import LoginPage from './components/LoginPage';
-import Feedback from './components/Feedback'; // Импортируем Feedback
+import Feedback from './components/Feedback';
 import PersonalAccount from './components/PersonalAccount'; 
 import styles from './App.module.scss'; 
 import React, {useState} from 'react';
