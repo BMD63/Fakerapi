@@ -1,10 +1,10 @@
 import {Routes, Route, Link, Navigate } from 'react-router-dom';
-// import { useNavigate } from 'react-router-dom'; // Импортируем useNavigate для роута на логин
-import HomePage from './components/HomePage';
-import ProductDetailPage from './components/ProductDetailPage';
-import LoginPage from './components/LoginPage';
-import Feedback from './components/Feedback';
-import PersonalAccount from './components/PersonalAccount'; 
+import { useNavigate, useLocation } from 'react-router-dom'; 
+import HomePage from './components/HomePage/HomePage';
+import ProductDetailPage from './components/ProductDetail/ProductDetailPage';
+import LoginPage from './components/Login/LoginPage';
+import Feedback from './components/Feedback/Feedback';
+import PersonalAccount from './components/PersonalAccount/PersonalAccount'; 
 import styles from './App.module.scss'; 
 import React, {useState} from 'react';
 
@@ -14,7 +14,8 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem('isLoggedIn') === 'true');
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  // const navigate = useNavigate(); // Используем useNavigate для редиректа на страницу входа
+  const navigate = useNavigate(); 
+  const location = useLocation();
   const openLoginModal = () => {
     setIsLoginModalOpen(true);
   };
@@ -22,18 +23,19 @@ function App() {
     // navigate('/');    // если нужно будет, можно добавить логику для перенаправления
     setIsLoginModalOpen(false);
   };
+  // обработка успешного входа
   const handleLoginSuccess = () => {
     setIsLoggedIn(true);
     localStorage.setItem('isLoggedIn', 'true');
     closeLoginModal();
   };
+  // выход из аккаунта
   const handleLogout = () => {
-    setIsLoggedIn(false);
     localStorage.setItem('isLoggedIn', 'false');
+    if (location.pathname === '/personal-account') {
+      navigate('/'); // Перенаправляем только если мы на странице личного кабинета
+    }
   };
-  console.log(isLoggedIn);
-  console.log(localStorage.getItem('isLoggedIn'));
-  console.log(isLoginModalOpen);
   return (
       <div className={styles.appContainer}>
         <nav className={styles.mainNav}>

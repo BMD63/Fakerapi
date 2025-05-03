@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { FeedbackFormState } from "../types/feedback";
+import { FeedbackFormState } from "../../types/feedback";
 
 const initialState: FeedbackFormState = {
     fio: "",

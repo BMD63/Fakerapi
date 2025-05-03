@@ -1,13 +1,14 @@
 import React from 'react';
-import { useGetPersonQuery } from '../services/personsApi';
-// import { PersonData } from '../types/persons';
+import { useGetPersonQuery } from '../../services/personsApi';
 import styles from './PersonalAccount.module.scss';
+
 const PersonalAccount: React.FC<{ onLoginOut: () => void }> = ({ onLoginOut }) => {
     const {data: personData,isLoading, isError, error} = useGetPersonQuery();
-    console.log('personData', personData);
-    console.log('isLoading', isLoading);
-    console.log('isError', isError);
-    console.log('error', error);
+
+    const handleLogout = () => {
+        onLoginOut();
+    }; 
+    // Проверяем состояние загрузки и ошибки
     if (isLoading) {
         return <div>Loading...</div>;
     }
@@ -26,10 +27,12 @@ const PersonalAccount: React.FC<{ onLoginOut: () => void }> = ({ onLoginOut }) =
     if (!personData) {
         return <div>Person data not found</div>;
     }
+    // Проверяем, есть ли данные о пользователе
+    // Если данные есть, отображаем их
     if (personData) {
         return (
             <div className={styles.personalAccountContainer}>
-                <button onClick={onLoginOut} className={styles.logoutButton}>
+                <button onClick={handleLogout} className={styles.logoutButton}>
                     Выйти из аккаунта
                 </button>
                 <h2 className={styles.title}>Личный кабинет</h2>
@@ -45,28 +48,26 @@ const PersonalAccount: React.FC<{ onLoginOut: () => void }> = ({ onLoginOut }) =
                     <p className={styles.info}>Пол: {personData.gender}</p>
                     </div>     
                 
-                <div className={styles.addressInfoBlock}>
-                <h3>Адрес:</h3>
-                <p className={styles.info}>Улица: {personData.address.street}</p>
-                <p className={styles.info}>Название улицы: {personData.address.streetName}</p>
-                <p className={styles.info}>Номер дома: {personData.address.buildingNumber}</p>
-                <p className={styles.info}>Город: {personData.address.city}</p>
-                <p className={styles.info}>Почтовый код: {personData.address.zipcode}</p>
-                <p className={styles.info}>Страна: {personData.address.country}</p>
-                <p className={styles.info}>Код страны: {personData.address.country_code}</p>
-                <p className={styles.info}>Широта: {personData.address.latitude}</p>
-                <p className={styles.info}>Долгота: {personData.address.longitude}</p>
-                <p className={styles.info}>Веб-сайт: {personData.website}</p>
-                <div className={styles.imageContainer}>
-                    <img src={personData.image} alt={`${personData.firstname} ${personData.lastname}`} />
-                </div>
-                </div>  
+                    <div className={styles.addressInfoBlock}>
+                    <h3>Адрес:</h3>
+                    <p className={styles.info}>Улица: {personData.address.street}</p>
+                    <p className={styles.info}>Название улицы: {personData.address.streetName}</p>
+                    <p className={styles.info}>Номер дома: {personData.address.buildingNumber}</p>
+                    <p className={styles.info}>Город: {personData.address.city}</p>
+                    <p className={styles.info}>Почтовый код: {personData.address.zipcode}</p>
+                    <p className={styles.info}>Страна: {personData.address.country}</p>
+                    <p className={styles.info}>Код страны: {personData.address.country_code}</p>
+                    <p className={styles.info}>Широта: {personData.address.latitude}</p>
+                    <p className={styles.info}>Долгота: {personData.address.longitude}</p>
+                    <p className={styles.info}>Веб-сайт: {personData.website}</p>
+                    <div className={styles.imageContainer}>
+                        <img src={personData.image} alt={`${personData.firstname} ${personData.lastname}`} />
+                    </div>
                 </div>
             </div>
-        );
+        </div>
+    );
     }
-    return (
-        null
-    )
-}
-export default PersonalAccount
+};
+
+export default PersonalAccount;

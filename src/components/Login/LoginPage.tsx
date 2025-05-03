@@ -1,10 +1,10 @@
 import React from 'react'  
-import {useForm, SubmitHandler} from 'react-hook-form'
+import {useForm, SubmitHandler} from 'react-hook-form' //используем react-hook-form для валидации формы
 import styles from './LoginPage.module.scss' 
 import { useNavigate } from 'react-router-dom'
-import { LoginFormValues, LoginPageProps } from '../types/login'  
+import { LoginFormValues, LoginPageProps } from '../../types/login'  
 import { FaTimes } from 'react-icons/fa'
-import { TEST_CREDENTIALS } from '../constants'
+import { TEST_CREDENTIALS } from '../../constants'
 
 const LoginPage: React.FC<LoginPageProps> = ({onClose, onLoginSuccess}) => {
     const { register, handleSubmit, formState: { errors } } = useForm<LoginFormValues>();
@@ -18,7 +18,6 @@ const LoginPage: React.FC<LoginPageProps> = ({onClose, onLoginSuccess}) => {
         } else {
             alert('Неверные учетные данные');
         }
-        console.log(data);
     };
     return (
             <div className={styles.modalOverlay} onClick={onClose}>

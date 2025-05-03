@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { productsApi } from "../services/productsApi";
 import {personsApi} from '../services/personsApi';
-import feedbackFormReducer from "../components/feedbackFormSlice";
+import feedbackFormReducer from "../components/Feedback/feedbackFormSlice";
 
 
 export const store = configureStore({

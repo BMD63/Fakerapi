@@ -2,10 +2,10 @@ import React, { useEffect } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useCallback, useState } from 'react'
-import { useAppDispatch, useAppSelector } from '../hooks'
+import { useAppDispatch, useAppSelector } from '../../hooks'
 import {FaTimes} from 'react-icons/fa'
-import { useGetPersonQuery } from '../services/personsApi'
-import { FeedbackFormModal } from '../types/feedback'
+import { useGetPersonQuery } from '../../services/personsApi'
+import { FeedbackFormModal } from '../../types/feedback'
 import {
     setFio,
     setPhone,
@@ -30,9 +30,8 @@ const Feedback : React.FC<FeedbackFormProps> = () => {
           setIsLoggedIn(event.newValue === 'true');
         }
       };
-  
+      // Изменяем состояние isLoggedIn при изменении localStorage
       window.addEventListener('storage', handleStorageChange);
-  
       // Очистка слушателя при размонтировании компонента
       return () => {
         window.removeEventListener('storage', handleStorageChange);

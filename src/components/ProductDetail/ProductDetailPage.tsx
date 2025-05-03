@@ -1,27 +1,23 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { useGetProductByIdQuery } from '../services/productsApi';
 import styles from './ProductDetailPage.module.scss'
-import { RouteParams } from '../types/routs'
+import { RouteParams } from '../../types/routs'
 import { FaTimes } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import useProductListResult from '../../hooks/useProductList'
 
 const ProductDetailPage: React.FC = () => {
     const { id } = useParams<RouteParams>()
     const navigate = useNavigate();
+    const { allProducts } = useProductListResult()
     const handleCloseClick = () => {
         navigate('/');
     }
-    const { data: product, isLoading, error } = useGetProductByIdQuery(id as string, { skip: !id });    
-    if (isLoading) {
-        return <div>Загрузка...</div>
-    }
-    if (error) {
-        return <div>Ошибка загрузки продукта</div>
-    }
+    const product = allProducts.find((p) => p.id === parseInt(id as string, 10));
+
     if (!product) {
-        return <div>Продукт не найден</div>
-    }   
+        return <div>Продукт не найден</div>;
+    }
     return (
         <div className={styles.container}>
           <button className={styles.closeButton}>
