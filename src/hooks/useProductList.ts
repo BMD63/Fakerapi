@@ -2,14 +2,17 @@ import React, {useState, useEffect, useMemo} from "react";
 import { useGetProductsQuery } from "../services/productsApi";
 import { Product, IUseProductListResult } from "../types/products";
 
-const UseProductListResult = (): IUseProductListResult => {
+const useProductListResult = (): IUseProductListResult => {
     const [page, setPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
-    const { data: productsResponse, isLoading, error } = useGetProductsQuery(page);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const queryArgs = useMemo(() => ({ page, quantity: itemsPerPage }), [page, itemsPerPage]);
+    const nextPageQueryArgs = useMemo(() => ({ page: page + 1, quantity: 1 }), [page]);
+    const { data: productsResponse, isLoading, error, refetch } = useGetProductsQuery(queryArgs);
     const allProducts: Product[] = useMemo(() => productsResponse?.data || [], [productsResponse?.data]);
     const [filteredProducts, setFilteredProducts] = useState<Product[]>(allProducts);
-    const [hasNextPage, setHasNextPage] = useState(true);
-    const { data: nextPageProducts, isLoading: isNextPageLoading } = useGetProductsQuery(page + 1, {
+    const [hasNextPage, setHasNextPage] = useState(false);
+    const { data: nextPageProducts } = useGetProductsQuery(nextPageQueryArgs, {
         skip: isLoading || !!error || !productsResponse?.data?.length,
     });
     // Фильтрация продуктов по поисковому запросу
@@ -23,14 +26,14 @@ const UseProductListResult = (): IUseProductListResult => {
     , [allProducts, searchTerm]);
     // Проверка наличия следующей страницы для пагинации
     useEffect(() => {
-        if (nextPageProducts?.data && nextPageProducts.data.length > 0) {
-            setHasNextPage(true);
-        } else if (!isNextPageLoading && page > 0 && productsResponse?.data && productsResponse.data.length > 0) {
-            setHasNextPage(false);
-        } else {
-            setHasNextPage(false);
-        }
-    }, [nextPageProducts?.data, isNextPageLoading, page, productsResponse?.data]);
+        setHasNextPage(!!nextPageProducts?.data?.length);
+    }, [nextPageProducts?.data]);
+
+    // Обработка изменения количества элементов на странице
+    useEffect(() => {
+        refetch();
+        setPage(1); // Сбрасываем на первую страницу при изменении количества элементов
+    }, [itemsPerPage, refetch]);
 
     const handlePreviousPage = () => {
         if (page > 1) {
@@ -61,6 +64,8 @@ const UseProductListResult = (): IUseProductListResult => {
         handleNextPage,
         handleSearch,
         handleResetSearch,
+        itemsPerPage,
+        setItemsPerPage,
     };
 }
-export default UseProductListResult;
+export default useProductListResult;

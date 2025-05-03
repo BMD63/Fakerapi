@@ -16,12 +16,19 @@ const HomePage: React.FC = () => {
     handleNextPage,
     handleSearch,
     handleResetSearch,
+    itemsPerPage,
+    setItemsPerPage,
   } = useProductListResult();
+  const handleItemsPerPageChange = (newItemsPerPage: number) => {
+    setItemsPerPage(newItemsPerPage);
+  };
     if (isLoading) {
       return <div className={styles.loading}>Загрузка...</div>;
     }
     if (error) {
-      return <div className={styles.error}>Ошибка: {error.message}</div>;
+      return <div className={styles.error}>
+        Ошибка: {typeof error?.data === 'string' ? error.data : JSON.stringify(error?.data)}
+        </div>;
     }
     if (filteredProducts.length === 0) {
       return <div className={styles.noResults}>Нет продуктов для отображения</div>;
@@ -50,6 +57,27 @@ const HomePage: React.FC = () => {
         <span>Страница {page}</span>
         <button onClick={handleNextPage} disabled={!hasNextPage}>
           Вперед
+        </button>
+      </div>
+      <div className={styles.itemsPerPageControl}>
+        <span>Позиций на странице:</span>
+        <button
+          className={itemsPerPage === 10 ? styles.active : ''}
+          onClick={() => handleItemsPerPageChange(10)}
+        >
+          10
+        </button>
+        <button
+          className={itemsPerPage === 15 ? styles.active : ''}
+          onClick={() => handleItemsPerPageChange(15)}
+        >
+          15
+        </button>
+        <button
+          className={itemsPerPage === 20 ? styles.active : ''}
+          onClick={() => handleItemsPerPageChange(20)}
+        >
+          20
         </button>
       </div>
     </div>

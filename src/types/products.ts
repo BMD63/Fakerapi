@@ -1,4 +1,7 @@
 // src/types/index.ts
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { SerializedError } from '@reduxjs/toolkit';
+
 export interface Product {
     id: number;
     name: string;
@@ -31,9 +34,11 @@ export interface Product {
     filteredProducts: Product[];
     hasNextPage: boolean;
     isLoading: boolean;
-    error: any;
+    error: FetchBaseQueryError | SerializedError | null | undefined;
     handlePreviousPage: () => void;
     handleNextPage: () => void;
     handleSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
     handleResetSearch: () => void;
+    itemsPerPage: number;
+    setItemsPerPage: React.Dispatch<React.SetStateAction<number>>;
   }
